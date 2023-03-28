@@ -197,3 +197,113 @@ describe('/api/articles/:article_id', function(){
     });
 
 });
+
+
+describe('/api/articles', function(){
+
+    describe('200s', function(){
+
+        test('GET 200: returns an object with a key of articles', function(){
+
+            return superTest(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((response) => {
+
+                expect(Object.keys(response.body)).toEqual(['articles']);
+
+            });
+        });
+
+        test('GET 200: the articles key in the returned object should have an array as its value', function(){
+
+            return superTest(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toBeInstanceOf(Array);
+
+            });
+        });
+
+        test('GET 200: the array in the response object should populated by articles objects and have the correct length', function(){
+
+            return superTest(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toHaveLength(12);
+            });
+
+        });
+    
+
+        test('GET 200: each object in the articles array should have eight keys: author, title, article_id, topic, created_at, votes, article_img_url and comment_count keys containing the correct data types', function(){
+
+            return superTest(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((response) => {
+
+                response.body.articles.forEach((articleObj) => {
+
+                    expect(articleObj).toMatchObject({ 
+
+                        article_id: expect.any(Number),
+                        title: expect.any(String),
+                        topic: expect.any(String),
+                        author: expect.any(String), 
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        comment_count: expect.any(String)
+                    
+                    });
+
+
+                });
+
+                
+            });
+
+
+        });
+
+        test('GET 200: the article objects in the array should be sorted by date in descending order', function(){
+
+            return superTest(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toBeSortedBy('created_at', {
+                    descending: true,
+                    
+                });
+
+            });
+
+        });
+
+    });
+
+
+    describe('error handling', function(){
+
+        test('404: responds with an error message when passed an invalid pathway or typo', function(){
+
+            return superTest(app)
+            .get('/api/arTICKLES')
+            .expect(404)
+            .then(({ body }) =>{
+                expect(body.message).toBe('invalid pathway');
+
+            });
+
+        });
+
+    });
+
+});

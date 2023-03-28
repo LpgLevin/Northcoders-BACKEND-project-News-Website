@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById } = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder } = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -23,4 +23,20 @@ exports.getArticleById = (request, response, next) => {
         next(err);
 
     });
+};
+
+exports.getArticlesInOrder = (request, response, next) => {
+    selectArticlesInOrder()
+    .then((articles) => {
+        response.status(200)
+        .send({ articles })
+       
+    })
+
+    .catch((err) => {
+
+        next(err);
+
+    });
+
 };
