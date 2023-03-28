@@ -19,8 +19,6 @@ describe('/api/topics', function(){
             .expect(200)
             .then((response) => {
 
-                console.log(response.body.topics);
-
                 expect(Object.keys(response.body)).toEqual(['topics']);
 
             });
@@ -86,6 +84,116 @@ describe('/api/topics', function(){
 
         });
 
+    });
+
+});
+
+
+
+
+
+describe('/api/articles/:article_id', function(){
+
+    describe('200s', function(){
+
+        test('GET 200: returns an article object', function(){
+
+            return superTest(app)
+            .get('/api/articles/9')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body).toBeInstanceOf(Object);
+
+            });
+        });
+
+
+        test('GET 200: returns an article object which has author, title, article_id, body, topic, created_at, votes and article_img_url keys containing the correct data types', function(){
+
+            return superTest(app)
+            .get('/api/articles/9')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articleObject[0]).toMatchObject({ 
+
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic: expect.any(String),
+                    author: expect.any(String), 
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String)
+                
+                });
+
+                
+
+            });
+
+
+        });
+
+        test('GET 200: returns the article object which corresponds with the article_id passed in', function(){
+
+            return superTest(app)
+            .get('/api/articles/9')
+            .expect(200)
+            .then((response) => {
+
+                const articleObject =  {
+                    article_id: 9,
+                    title: "They're not exactly dogs, are they?",
+                    topic: 'mitch',
+                    author: 'butter_bridge',
+                    body: 'Well? Think about it.',
+                    created_at: "2020-06-06T09:10:00.000Z",
+                    votes: 0,
+                    article_img_url:
+                      'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+                  };
+
+                expect(response.body.articleObject[0]).toEqual(articleObject);
+
+            });
+
+        });
+
+        
+    });
+
+
+    describe('error handling', function(){
+
+        test('GET 404: returns 404 and a message, "article not found" when article_id passed in is valid but non existent', function(){
+
+            return superTest(app)
+            .get('/api/articles/9350')
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'article not found' });
+
+            });
+
+        });
+
+        test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
+
+            return superTest(app)
+            .get('/api/articles/notANumber')
+            .expect(400)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'invalid id' });
+
+            });
+
+        });
+
+            
     });
 
 });
