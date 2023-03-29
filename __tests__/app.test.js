@@ -289,14 +289,14 @@ describe('/api/articles', function(){
 
 });
 
-describe('/api/article/:article_id/comments', function(){
+describe('/api/articles/:article_id/comments', function(){
 
     describe('200s', function(){
 
         test('GET 200: returns an array of comment objects', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -310,7 +310,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: returns an array of comment objects which is the correct length and has the following properties: comment_id, votes, created_at, author, body, article_id', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -334,7 +334,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: comment objects in the returned array should be ordered from most recent to oldest.', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -350,7 +350,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: returns the array of comment objects which corresponds with the article_id passed in', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -369,7 +369,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 404: returns 404 and a message, "article not found" when article_id passed in is valid but non existent', function(){
 
             return superTest(app)
-            .get('/api/article/7098/comments')
+            .get('/api/articles/7098/comments')
             .expect(404)
             .then((response) => {
 
@@ -382,7 +382,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
 
             return superTest(app)
-            .get('/api/article/notANumber/comments')
+            .get('/api/articles/notANumber/comments')
             .expect(400)
             .then((response) => {
 
