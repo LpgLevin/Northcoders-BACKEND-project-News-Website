@@ -35,8 +35,9 @@ describe('/api/topics', function(){
 
             });
         });
+    
 
-        test('GET 200: the array in the response object should populated by topics objects and have the correct length', function(){
+        test('GET 200:the array in the response object should have the correct length and each object in the topics array should have two keys, description and slug, whose values will be strings', function(){
 
             return superTest(app)
             .get('/api/topics')
@@ -44,17 +45,6 @@ describe('/api/topics', function(){
             .then((response) => {
 
                 expect(response.body.topics).toHaveLength(3);
-            });
-
-        });
-    
-
-        test('GET 200: each object in the topics array should have two keys, description and slug, whose values will be strings', function(){
-
-            return superTest(app)
-            .get('/api/topics')
-            .expect(200)
-            .then((response) => {
 
                 response.body.topics.forEach((topic) => {
 
@@ -213,6 +203,7 @@ describe('/api/articles', function(){
                 expect(Object.keys(response.body)).toEqual(['articles']);
 
             });
+
         });
 
         test('GET 200: the articles key in the returned object should have an array as its value', function(){
@@ -225,9 +216,10 @@ describe('/api/articles', function(){
                 expect(response.body.articles).toBeInstanceOf(Array);
 
             });
-        });
 
-        test('GET 200: the array in the response object should populated by articles objects and have the correct length', function(){
+        });
+    
+        test('GET 200: the array in the response object have the correct length and each object in the articles array should have eight keys: author, title, article_id, topic, created_at, votes, article_img_url and comment_count keys containing the correct data types', function(){
 
             return superTest(app)
             .get('/api/articles')
@@ -235,17 +227,6 @@ describe('/api/articles', function(){
             .then((response) => {
 
                 expect(response.body.articles).toHaveLength(12);
-            });
-
-        });
-    
-
-        test('GET 200: each object in the articles array should have eight keys: author, title, article_id, topic, created_at, votes, article_img_url and comment_count keys containing the correct data types', function(){
-
-            return superTest(app)
-            .get('/api/articles')
-            .expect(200)
-            .then((response) => {
 
                 response.body.articles.forEach((articleObj) => {
 
