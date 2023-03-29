@@ -288,3 +288,111 @@ describe('/api/articles', function(){
     });
 
 });
+
+describe('/api/article/:article_id/comments', function(){
+
+    describe('200s', function(){
+
+        test('GET 200: returns an array of comment objects', function(){
+
+            return superTest(app)
+            .get('/api/article/9/comments')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.commentArray).toBeInstanceOf(Array);
+                expect(response.body.commentArray[0]).toBeInstanceOf(Object);
+
+            });
+        });
+
+
+        test('GET 200: returns an array of comment objects which is the correct length and has the following properties: comment_id, votes, created_at, author, body, article_id', function(){
+
+            return superTest(app)
+            .get('/api/article/9/comments')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.commentArray).toHaveLength(2);
+
+                expect(response.body.commentArray[0]).toMatchObject({ 
+
+                    comment_id: expect.any(Number),
+                    article_id: expect.any(Number),
+                    author: expect.any(String), 
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+                
+                });                
+
+            });
+
+        });
+
+        test('GET 200: comment objects in the returned array should be ordered from most recent to oldest.', function(){
+
+            return superTest(app)
+            .get('/api/article/9/comments')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.commentArray).toBeSortedBy('created_at', {
+                    descending: true,
+                    
+                });
+
+            });
+
+        });
+
+        test('GET 200: returns the array of comment objects which corresponds with the article_id passed in', function(){
+
+            return superTest(app)
+            .get('/api/article/9/comments')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.commentArray[0].article_id).toEqual(9);
+
+            });
+
+        });
+
+        
+    });
+
+
+    describe('error handling', function(){
+
+        test('GET 404: returns 404 and a message, "article not found" when article_id passed in is valid but non existent', function(){
+
+            return superTest(app)
+            .get('/api/article/7098/comments')
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'article not found' });
+
+            });
+
+        });
+
+        test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
+
+            return superTest(app)
+            .get('/api/article/notANumber/comments')
+            .expect(400)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'invalid id' });
+
+            });
+
+        });
+
+            
+    });
+
+});

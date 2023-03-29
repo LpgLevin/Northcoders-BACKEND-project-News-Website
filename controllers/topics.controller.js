@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticlesInOrder } = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById } = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -39,4 +39,23 @@ exports.getArticlesInOrder = (request, response, next) => {
 
     });
 
+};
+
+
+exports.getCommentsById = (request, response, next) => {
+
+    const { article_id } = request.params;
+
+    selectCommentsById(article_id)
+    .then((commentArray) => {
+        response.status(200)
+        .send({ commentArray })
+       
+    })
+
+    .catch((err) => {
+
+        next(err);
+
+    });
 };
