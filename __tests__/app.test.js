@@ -289,14 +289,14 @@ describe('/api/articles', function(){
 
 });
 
-describe('/api/article/:article_id/comments', function(){
+describe('/api/articles/:article_id/comments', function(){
 
     describe('200s', function(){
 
         test('GET 200: returns an array of comment objects', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -310,7 +310,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: returns an array of comment objects which is the correct length and has the following properties: comment_id, votes, created_at, author, body, article_id', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -334,7 +334,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: comment objects in the returned array should be ordered from most recent to oldest.', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -350,7 +350,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 200: returns the array of comment objects which corresponds with the article_id passed in', function(){
 
             return superTest(app)
-            .get('/api/article/9/comments')
+            .get('/api/articles/9/comments')
             .expect(200)
             .then((response) => {
 
@@ -369,7 +369,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 404: returns 404 and a message, "article not found" when article_id passed in is valid but non existent', function(){
 
             return superTest(app)
-            .get('/api/article/7098/comments')
+            .get('/api/articles/7098/comments')
             .expect(404)
             .then((response) => {
 
@@ -382,7 +382,7 @@ describe('/api/article/:article_id/comments', function(){
         test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
 
             return superTest(app)
-            .get('/api/article/notANumber/comments')
+            .get('/api/articles/notANumber/comments')
             .expect(400)
             .then((response) => {
 
@@ -408,14 +408,11 @@ describe('7. POST /api/articles/:article_id/comments', function(){
         test('POST 201: responds with a posted json comment object?', function(){
 
             return superTest(app)
-            .post('/api/article/9/comments')
+            .post('/api/articles/9/comments')
             .send({ username: 'icellusedkars', body: 'This is my comment' })
             .expect(201)
             .then((response) => {
 
-                
-
-
                 expect(response.body.comment).toBeInstanceOf(Object);
 
             });
@@ -426,7 +423,7 @@ describe('7. POST /api/articles/:article_id/comments', function(){
         test('POST 201: responds with a posted json comment object?', function(){
 
             return superTest(app)
-            .post('/api/article/9/comments')
+            .post('/api/articles/9/comments')
             .send({username: 'icellusedkars', body: 'This is my comment'})
             .expect(201)
             .then((response) => {
@@ -438,47 +435,59 @@ describe('7. POST /api/articles/:article_id/comments', function(){
         });
 
 
-        test('POST 201: responds with a posted json comment object?', function(){
+        test('POST 201: has a key of comment with a value of the comment object entered.', function(){
 
             return superTest(app)
-            .post('/api/article/9/comments')
+            .post('/api/articles/9/comments')
             .send({username: 'icellusedkars', body: 'This is my comment'})
             .expect(201)
             .then((response) => {
 
-                expect(response.body.comment).toBeInstanceOf(Object);
+                expect(response.body.comment).toMatchObject({ 
+
+                    comment_id: expect.any(Number),
+                    article_id: expect.any(Number),
+                    author: expect.any(String), 
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+
+            
+                });                
 
             });
 
         });
-
 
 
     });
 
+
     describe('error handling', function(){
 
-        test('', function(){
+        test('POST 404: returns 404 and a message, "not found" when article_id passed in is valid but non existent', function(){
 
             return superTest(app)
-            .post('/api/article/7098/comments')
+            .post('/api/articles/7098/comments')
+            .send({username: 'icellusedkars', body: 'This is my comment'})
             .expect(404)
             .then((response) => {
 
-                expect(response.body).toEqual();
+                expect(response.body).toEqual({ message: 'not found' });
 
             });
 
         });
 
-        test('', function(){
+        test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
 
             return superTest(app)
-            .post('/api/article/notANumber/comments')
+            .post('/api/articles/notANumber/comments')
+            .send({username: 'icellusedkars', body: 'This is my comment'})
             .expect(400)
             .then((response) => {
 
-                expect(response.body).toEqual();
+                expect(response.body).toEqual({ message: 'invalid id' });
 
             });
 

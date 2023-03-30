@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById } = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById } = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -59,3 +59,27 @@ exports.getCommentsById = (request, response, next) => {
 
     });
 };
+
+exports.postComment = (request, response, next) => {
+
+    const { article_id } = request.params;
+
+    const { username, body } = request.body;
+
+
+    console.log('in the controller', request.body);
+
+    postCommentById( username, body, article_id )
+    .then((comment) => {
+        response.status(201)
+        .send({ comment })
+       
+    })
+
+    .catch((err) => {
+
+        next(err);
+
+    });
+};
+
