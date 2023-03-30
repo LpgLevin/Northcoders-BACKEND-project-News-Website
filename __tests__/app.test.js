@@ -396,3 +396,95 @@ describe('/api/article/:article_id/comments', function(){
     });
 
 });
+
+
+
+
+
+describe('7. POST /api/articles/:article_id/comments', function(){
+
+    describe('201s', function(){
+
+        test('POST 201: responds with a posted json comment object?', function(){
+
+            return superTest(app)
+            .post('/api/article/9/comments')
+            .send({ username: 'icellusedkars', body: 'This is my comment' })
+            .expect(201)
+            .then((response) => {
+
+                
+
+
+                expect(response.body.comment).toBeInstanceOf(Object);
+
+            });
+
+        });
+
+
+        test('POST 201: responds with a posted json comment object?', function(){
+
+            return superTest(app)
+            .post('/api/article/9/comments')
+            .send({username: 'icellusedkars', body: 'This is my comment'})
+            .expect(201)
+            .then((response) => {
+
+                expect(response.body.comment).toBeInstanceOf(Object);
+
+            });
+
+        });
+
+
+        test('POST 201: responds with a posted json comment object?', function(){
+
+            return superTest(app)
+            .post('/api/article/9/comments')
+            .send({username: 'icellusedkars', body: 'This is my comment'})
+            .expect(201)
+            .then((response) => {
+
+                expect(response.body.comment).toBeInstanceOf(Object);
+
+            });
+
+        });
+
+
+
+    });
+
+    describe('error handling', function(){
+
+        test('', function(){
+
+            return superTest(app)
+            .post('/api/article/7098/comments')
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual();
+
+            });
+
+        });
+
+        test('', function(){
+
+            return superTest(app)
+            .post('/api/article/notANumber/comments')
+            .expect(400)
+            .then((response) => {
+
+                expect(response.body).toEqual();
+
+            });
+
+        });
+
+            
+    });
+
+});
