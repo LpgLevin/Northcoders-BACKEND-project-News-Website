@@ -6,7 +6,7 @@ exports.invalidPathwayError = (req, res, next) => {
 
 exports.customError = (err, req, res, next) => {
 
-    console.log(err);
+    //console.log(err);
 
     if (err.status && err.message) {
         res.status(err.status).send({message: err.message })
@@ -28,6 +28,13 @@ exports.psqlError400 =(err, req, res, next) => {
         res.status(404).send({ message: "not found" })
 
     }
+
+    else if (err.code === '23502')
+    {
+        res.status(404).send({ message: "missing property" })
+
+    }
+
     else {
 
         next(err);
@@ -38,6 +45,8 @@ exports.psqlError400 =(err, req, res, next) => {
 
 
 exports.serverError500 = (err, req, res, next) => {
+
+    console.log(err);
 
     res.status(500).send({ message: 'Holy guacamole, internal server error!'});
     

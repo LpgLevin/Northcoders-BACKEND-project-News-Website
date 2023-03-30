@@ -59,7 +59,6 @@ exports.selectCommentsById = (article_id) => {
 
 exports.postCommentById = ( username, body, article_id ) => {
 
-   
     return db.query(`
     INSERT INTO comments (author, body, article_id)
     VALUES ($1, $2, $3)

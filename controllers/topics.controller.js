@@ -66,9 +66,6 @@ exports.postComment = (request, response, next) => {
 
     const { username, body } = request.body;
 
-
-    console.log('in the controller', request.body);
-
     postCommentById( username, body, article_id )
     .then((comment) => {
         response.status(201)

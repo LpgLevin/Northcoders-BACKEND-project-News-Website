@@ -420,7 +420,7 @@ describe('7. POST /api/articles/:article_id/comments', function(){
         });
 
 
-        test('POST 201: responds with a posted json comment object?', function(){
+        test('POST 201: has a key of comment with a value of the comment object entered.', function(){
 
             return superTest(app)
             .post('/api/articles/9/comments')
@@ -428,18 +428,27 @@ describe('7. POST /api/articles/:article_id/comments', function(){
             .expect(201)
             .then((response) => {
 
-                expect(response.body.comment).toBeInstanceOf(Object);
+                expect(response.body.comment).toMatchObject({ 
+
+                    comment_id: expect.any(Number),
+                    article_id: expect.any(Number),
+                    author: expect.any(String), 
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+
+            
+                });                
 
             });
 
         });
 
-
-        test('POST 201: has a key of comment with a value of the comment object entered.', function(){
+        test('POST 201: ignores any unnecessary keys entered.', function(){
 
             return superTest(app)
             .post('/api/articles/9/comments')
-            .send({username: 'icellusedkars', body: 'This is my comment'})
+            .send( { username: 'icellusedkars', body: 'This is my comment', phoneNumber: '07836264859' } )
             .expect(201)
             .then((response) => {
 
@@ -478,6 +487,35 @@ describe('7. POST /api/articles/:article_id/comments', function(){
             });
 
         });
+
+        test('POST 404: returns 404 and a message, "not found" when username entered is not a username', function(){
+
+            return superTest(app)
+            .post('/api/articles/7098/comments')
+            .send({username: 'LilyIsTheBest', body: 'This is my comment'})
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'not found' });
+
+            });
+
+        });
+
+        test('POST 404: returns 404 and a message, "not found" when there is no username OR no body', function(){
+
+            return superTest(app)
+            .post('/api/articles/7098/comments')
+            .send({username: 'icellusedkars'})
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'missing property' });
+
+            });
+
+        });
+
 
         test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
 
