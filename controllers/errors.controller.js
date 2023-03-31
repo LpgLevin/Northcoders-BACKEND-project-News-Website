@@ -25,6 +25,7 @@ exports.psqlError400 =(err, req, res, next) => {
 
     else if (err.code === '23503')
     {
+        
         res.status(404).send({ message: "not found" })
 
     }

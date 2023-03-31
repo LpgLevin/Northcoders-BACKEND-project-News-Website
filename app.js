@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics, getArticleById, getArticlesInOrder, getCommentsById, postComment } = require('./controllers/topics.controller')
+const { getTopics, getArticleById, getArticlesInOrder, getCommentsById, postComment, patchVotes } = require('./controllers/topics.controller')
 const { invalidPathwayError, customError, psqlError400, serverError500 } = require('./controllers/errors.controller');
 
 
@@ -17,6 +17,8 @@ app.get('/api/articles', getArticlesInOrder);
 app.get('/api/articles/:article_id/comments', getCommentsById);
 
 app.post('/api/articles/:article_id/comments', postComment);
+
+app.patch('/api/articles/:article_id', patchVotes);
 
 app.all('/*', invalidPathwayError);
 
