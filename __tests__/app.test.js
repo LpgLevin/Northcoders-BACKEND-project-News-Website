@@ -567,7 +567,7 @@ describe('8. PATCH /api/articles/:article_id', function(){
 
                 expect(response.body.updatedArticle).toMatchObject({ 
 
-                    article_id: expect.any(Number),
+                    article_id: 1,
                     title: expect.any(String),
                     topic: expect.any(String),
                     author: expect.any(String), 
@@ -604,7 +604,7 @@ describe('8. PATCH /api/articles/:article_id', function(){
         });
 
 
-        test('PATCH 404: returns 404 and a message, "not found" when there is no key', function(){
+        test('PATCH 404: returns 404 and a message, "missing property" when there is no key', function(){
 
             return superTest(app)
             .patch('/api/articles/1')
@@ -619,11 +619,82 @@ describe('8. PATCH /api/articles/:article_id', function(){
         });
 
 
-        test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
+        test('PATCH 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
 
             return superTest(app)
             .patch('/api/articles/notANumber')
             .send({ inc_votes: 1 })
+            .expect(400)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'invalid id' });
+
+            });
+
+
+        });
+
+
+    });
+
+
+});
+
+
+
+describe('9. DELETE /api/comments/:comment_id', function(){
+
+    describe('204s', function(){
+
+        test('DELETE 204: responds 204', function(){
+
+            return superTest(app)
+            .delete('/api/comments/1')
+            .expect(204)
+            .then((response) => {
+
+                return db.query(`
+                SELECT * 
+                FROM comments 
+                WHERE comment_id = 1;`)
+            })
+
+            .then((result) => {
+
+                expect(result.rows).toHaveLength(0);
+            })
+
+        });
+
+        
+    });
+
+
+
+
+
+
+    describe('error handling', function(){
+
+
+        test('DELETE 404: returns 404 and a message, "not found" when comment_id passed in is valid but non existent', function(){
+
+            return superTest(app)
+            .delete('/api/comments/7809')
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'not found' });
+
+            });
+
+        });
+
+
+        test('DELETE 400: returns 400 and a message, "invalid id" when comment_id passed in is not a number', function(){
+
+            return superTest(app)
+            .delete('/api/comments/notANumber')
             .expect(400)
             .then((response) => {
 
