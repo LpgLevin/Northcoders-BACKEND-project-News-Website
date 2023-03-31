@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById, patchVotesById} = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById, patchVotesById, deleteCommentsById, selectCommentByCommentId} = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -102,3 +102,25 @@ exports.patchVotes = (request, response, next) => {
 
 };
 
+exports.deleteComments = (request, response, next) => {
+
+    const { comment_id } = request.params;
+
+    selectCommentByCommentId( comment_id )
+    .then(() => {
+
+        deleteCommentsById( comment_id )
+        .then(() => {
+            response.status(204)
+            .send()
+           
+        })
+
+    })
+    .catch((err) => {
+
+        next(err);
+
+    });
+
+};
