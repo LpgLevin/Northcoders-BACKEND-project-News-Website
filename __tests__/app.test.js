@@ -535,3 +535,107 @@ describe('7. POST /api/articles/:article_id/comments', function(){
     });
 
 });
+
+
+describe('8. PATCH /api/articles/:article_id', function(){
+
+    describe('201s', function(){
+
+        test('PATCH 201: responds with an object', function(){
+
+            return superTest(app)
+            .patch('/api/articles/1')
+            .send({ inc_votes: 1 })
+            .expect(201)
+            .then((response) => {
+
+                expect(response.body.updatedArticle).toBeInstanceOf(Object);
+
+            });
+
+        });
+
+        test('PATCH 201: responds with the updated article', function(){
+
+            return superTest(app)
+            .patch('/api/articles/1')
+            .send({ inc_votes: 1 })
+            .expect(201)
+            .then((response) => {
+
+                expect(response.body.updatedArticle.votes).toBe(101);
+
+                expect(response.body.updatedArticle).toMatchObject({ 
+
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic: expect.any(String),
+                    author: expect.any(String), 
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String)
+                
+                });
+
+            });
+
+        });
+
+
+    });
+
+
+
+    describe('error handling', function(){
+
+
+        test('PATCH 404: returns 404 and a message, "article not found" when article_id passed in is valid but non existent', function(){
+
+            return superTest(app)
+            .patch('/api/articles/7098')
+            .send({ inc_votes: 1 })
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'article not found' });
+
+            });
+
+        });
+
+
+        test('PATCH 404: returns 404 and a message, "not found" when there is no key', function(){
+
+            return superTest(app)
+            .patch('/api/articles/1')
+            .send({})
+            .expect(404)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'missing property' });
+
+            });
+
+        });
+
+
+        test('GET 400: returns 400 and a message, "invalid id" when article_id passed in is not a number', function(){
+
+            return superTest(app)
+            .patch('/api/articles/notANumber')
+            .send({ inc_votes: 1 })
+            .expect(400)
+            .then((response) => {
+
+                expect(response.body).toEqual({ message: 'invalid id' });
+
+            });
+
+
+        });
+
+
+    });
+
+
+});

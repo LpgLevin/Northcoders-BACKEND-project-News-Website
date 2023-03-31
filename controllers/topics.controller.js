@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById } = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById, patchVotesById} = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -78,5 +78,27 @@ exports.postComment = (request, response, next) => {
         next(err);
 
     });
+};
+
+
+exports.patchVotes = (request, response, next) => {
+
+    const { article_id } = request.params;
+
+    const { inc_votes } = request.body;
+
+    patchVotesById( inc_votes, article_id )
+    .then((updatedArticle) => {
+        response.status(201)
+        .send({ updatedArticle })
+       
+    })
+
+    .catch((err) => {
+
+        next(err);
+
+    });
+
 };
 
