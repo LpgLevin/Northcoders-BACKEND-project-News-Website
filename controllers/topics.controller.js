@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById, patchVotesById, deleteCommentsById, selectCommentByCommentId} = require('../models/topics.model');
+const { selectTopics, selectArticleById, selectArticlesInOrder, selectCommentsById, postCommentById, patchVotesById, deleteCommentsById, selectCommentByCommentId, selectUsers} = require('../models/topics.model');
 
 exports.getTopics = (request, response, next) =>{
 
@@ -122,5 +122,14 @@ exports.deleteComments = (request, response, next) => {
         next(err);
 
     });
+
+};
+
+
+exports.getUsers = (request, response, next) =>{
+
+    selectUsers()
+    .then((arrayOfUsers) => { response.status(200).send({ users : arrayOfUsers })})
+    .catch(next);
 
 };

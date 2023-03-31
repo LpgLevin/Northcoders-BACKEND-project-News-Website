@@ -710,3 +710,79 @@ describe('9. DELETE /api/comments/:comment_id', function(){
 
 
 });
+
+
+describe('/api/users', function(){
+
+    describe('200s', function(){
+
+        test('GET 200: returns an object with a key of users', function(){
+
+            return superTest(app)
+            .get('/api/users')
+            .expect(200)
+            .then((response) => {
+
+                expect(Object.keys(response.body)).toEqual(['users']);
+
+            });
+        });
+
+        test('GET 200: the users key in the returned object should have an array as its value', function(){
+
+            return superTest(app)
+            .get('/api/users')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.users).toBeInstanceOf(Array);
+
+            });
+        });
+    
+
+        test('GET 200: the array in the response object should have the correct length and each object in the users array should have three keys, username, name and avatar_url, whose values will be strings', function(){
+
+            return superTest(app)
+            .get('/api/users')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.users).toHaveLength(4);
+
+                response.body.users.forEach((user) => {
+
+                    expect(user).toMatchObject({ 
+
+                        username: expect.any(String), 
+                        name: expect.any(String), 
+                        avatar_url: expect.any(String)
+                    })
+
+                });
+
+            });
+        
+
+        });
+
+    });
+
+
+    describe('error handling', function(){
+
+        test('404: responds with an error message when passed an invalid pathway or typo', function(){
+
+            return superTest(app)
+            .get('/api/userz')
+            .expect(404)
+            .then(({ body }) =>{
+                expect(body.message).toBe('invalid pathway');
+
+            });
+
+        });
+
+    });
+
+});
