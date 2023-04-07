@@ -37,11 +37,11 @@ exports.getArticlesInOrder = (request, response, next) => {
 
 
 
-    const { order, sort_by } = request.query;
+    const { order, sort_by, topic } = request.query;
 
     
 
-    selectArticlesInOrder(order, sort_by)
+    selectArticlesInOrder(order, sort_by, topic)
     .then((articles) => {
         response.status(200)
         .send({ articles })

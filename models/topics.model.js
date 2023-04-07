@@ -32,16 +32,27 @@ exports.selectArticleById = (article_id) => {
 
 
 
-exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at') => {
+exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at', topic) => {
+
+    const sqlArgArray = [];
   
-        let sql = `
+ let sql = `
     SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
     COUNT(comments.comment_id) 
-    AS comment_count 
-    FROM articles 
+    AS comment_count FROM articles 
     LEFT JOIN comments 
-    ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id` 
+    ON articles.article_id = comments.article_id` 
+
+    if(topic){
+
+        sqlArgArray.push(topic);
+
+        sql += ` WHERE articles.topic = $1`;
+
+    };
+
+    sql += ` 
+    GROUP BY articles.article_id`
 
 
     ///api/articles?sort_by=votes
@@ -67,10 +78,16 @@ exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at') => {
        
     }
 
-    return db.query(sql)
+
+    return db.query(sql, sqlArgArray)
 
     .then((result) => {
         
+        if(result.rowCount === 0) {
+
+            return Promise.reject({ status: 404, message: 'topic not found'});
+        }
+
         return result.rows;
 
     });
@@ -144,7 +161,6 @@ exports.deleteCommentsById = ( comment_id ) => {
     });
 
 };
-
 
 exports.selectCommentByCommentId = (comment_id) => {
 

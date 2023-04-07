@@ -327,6 +327,30 @@ describe('11. /api/articles queries 200s', function(){
             });
         });
 
+        test('GET 200: filters articles by topic', function(){
+
+            return superTest(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toHaveLength(1);
+                
+                expect(response.body.articles[0]).toMatchObject({ 
+
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic: 'cats',
+                    author: expect.any(String), 
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                    comment_count: expect.any(String)
+                
+                });
+            });
+        });
+
     });
 
     describe('queries errors', function(){
@@ -355,11 +379,31 @@ describe('11. /api/articles queries 200s', function(){
 
         });
 
+        test('400: responds with an error message "topic not found" when passed an invalid topic', function(){
+
+            return superTest(app)
+            .get('/api/articles?topic=catss')
+            .expect(404)
+            .then(({ body }) =>{
+                expect(body.message).toBe('topic not found');
+
+            });
+
+        });
+
+
+
     });
 
 });
 
+//FEATURE REQUEST
 
+// The end point should also accept the following queries:
+
+        //---should i do seperate test suite for each query?
+
+// ---topic----, which filters the articles -----by the topic value ----specified in the query. ----If the query is omitted ----the endpoint should respond with -----all articles.
 
 
 describe('6. GET /api/articles/:article_id/comments', function(){
@@ -469,9 +513,6 @@ describe('6. GET /api/articles/:article_id/comments', function(){
     });
 
 });
-
-
-
 
 
 describe('7. POST /api/articles/:article_id/comments', function(){
@@ -713,7 +754,6 @@ describe('8. PATCH /api/articles/:article_id', function(){
 });
 
 
-
 describe('9. DELETE /api/comments/:comment_id', function(){
 
     describe('204s', function(){
@@ -775,8 +815,11 @@ describe('9. DELETE /api/comments/:comment_id', function(){
 
 
     });
-    
-describe('/api/users', function(){
+
+});
+  
+
+describe('10. GET /api/users', function(){
 
     describe('200s', function(){
 
@@ -850,3 +893,4 @@ describe('/api/users', function(){
     });
 
 });
+
