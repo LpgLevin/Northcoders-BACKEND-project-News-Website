@@ -9,27 +9,25 @@ exports.selectTopics = () => {
 
 exports.selectArticleById = (article_id) => {
 
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    return db.query(`
+    SELECT articles.*,
+    CAST(COUNT(comments.comment_id)AS INTEGER)
+    AS comment_count 
+    FROM articles 
+    LEFT JOIN comments 
+    ON articles.article_id = comments.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id`, [article_id])
     .then((result) => {
 
         if(result.rowCount === 0) {
 
             return Promise.reject({ status: 404, message: 'article not found'});
         }
+
         return result.rows;
     });
 };
-
-
-
-//user needs to be able to change what its sorted by or only fetch from one topic.
-
-// /api/articles?sort_by=votes&order=ascending ----sorts articles in ascending oreder by number of votes
-
-// /api/articles?topic=cats ---this would be returning a list of all the article with a topic of cats
-
-// /api/articles?topic=cats&sort_by=votes  ---this would get all the cats articles in order of how many votes they have. default - desc
-
 
 
 exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at', topic) => {
@@ -53,11 +51,6 @@ exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at', topic) 
 
     sql += ` 
     GROUP BY articles.article_id`
-
-
-    ///api/articles?sort_by=votes
-
-    // greenlist -----apply to columns not topics ----will need selectTopics
 
     const validOrders = ['ASC', 'DESC']
 

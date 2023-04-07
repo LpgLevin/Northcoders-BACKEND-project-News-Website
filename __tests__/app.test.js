@@ -79,10 +79,7 @@ describe('3. GET /api/topics', function(){
 });
 
 
-
-
-
-describe('4. GET /api/articles/:article_id', function(){
+describe('4. (12) GET /api/articles/:article_id', function(){
 
     describe('200s', function(){
 
@@ -99,7 +96,7 @@ describe('4. GET /api/articles/:article_id', function(){
         });
 
 
-        test('GET 200: returns an article object which has author, title, article_id, body, topic, created_at, votes and article_img_url keys containing the correct data types', function(){
+        test('GET 200: returns an article object which has author, title, article_id, body, topic, created_at, votes, article_img_url and (12)-comment_count keys containing the correct data types', function(){
 
             return superTest(app)
             .get('/api/articles/9')
@@ -115,7 +112,8 @@ describe('4. GET /api/articles/:article_id', function(){
                     body: expect.any(String),
                     created_at: expect.any(String),
                     votes: expect.any(Number),
-                    article_img_url: expect.any(String)
+                    article_img_url: expect.any(String),
+                    comment_count: 2
                 
                 });
 
@@ -143,6 +141,7 @@ describe('4. GET /api/articles/:article_id', function(){
                     votes: 0,
                     article_img_url:
                       'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+                    comment_count: 2
                   };
 
                 expect(response.body.articleObject[0]).toEqual(articleObject);
@@ -396,14 +395,6 @@ describe('11. /api/articles queries 200s', function(){
     });
 
 });
-
-//FEATURE REQUEST
-
-// The end point should also accept the following queries:
-
-        //---should i do seperate test suite for each query?
-
-// ---topic----, which filters the articles -----by the topic value ----specified in the query. ----If the query is omitted ----the endpoint should respond with -----all articles.
 
 
 describe('6. GET /api/articles/:article_id/comments', function(){
