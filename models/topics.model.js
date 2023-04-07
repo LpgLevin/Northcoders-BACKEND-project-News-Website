@@ -158,3 +158,10 @@ exports.selectCommentByCommentId = (comment_id) => {
         return result.rows;
     });
 };
+
+exports.selectUsers = () => {
+
+    return db.query(`SELECT * FROM users;`)
+    .then((result) => { return result.rows });
+
+};
