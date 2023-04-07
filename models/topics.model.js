@@ -20,20 +20,59 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-exports.selectArticlesInOrder = () => {
 
-    return db.query(`
+
+//user needs to be able to change what its sorted by or only fetch from one topic.
+
+// /api/articles?sort_by=votes&order=ascending ----sorts articles in ascending oreder by number of votes
+
+// /api/articles?topic=cats ---this would be returning a list of all the article with a topic of cats
+
+// /api/articles?topic=cats&sort_by=votes  ---this would get all the cats articles in order of how many votes they have. default - desc
+
+
+
+exports.selectArticlesInOrder = ( order = 'DESC', column = 'created_at') => {
+  
+        let sql = `
     SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
     COUNT(comments.comment_id) 
     AS comment_count 
     FROM articles 
     LEFT JOIN comments 
     ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id 
-    ORDER BY articles.created_at DESC;`)
-    .then((result) => {
+    GROUP BY articles.article_id` 
 
+
+    ///api/articles?sort_by=votes
+
+    // greenlist -----apply to columns not topics ----will need selectTopics
+
+    const validOrders = ['ASC', 'DESC']
+
+    const validColumns = ['topic', 'author', 'body', 'created_at', 'votes',]
+
+
+    if(validOrders.includes(order) && validColumns.includes(column)){ 
+        
+        sql += ` ORDER BY articles.${column} ${order};` 
+    }   
+
+
+    else {
+
+
+        return Promise.reject({ status: 400, message: 'invalid query'});
+    
+       
+    }
+
+    return db.query(sql)
+
+    .then((result) => {
+        
         return result.rows;
+
     });
 
 

@@ -12,7 +12,15 @@ app.get('/api/topics', getTopics);
 
 app.get('/api/articles/:article_id', getArticleById);
 
+//what happens in here? nothing?
+
+
 app.get('/api/articles', getArticlesInOrder);
+
+
+//access queries in the same way as parametric ep
+
+
 
 app.get('/api/articles/:article_id/comments', getCommentsById);
 
