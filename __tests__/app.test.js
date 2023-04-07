@@ -8,7 +8,7 @@ beforeEach(() => {return seed(testData)});
 afterAll(() => { return db.end() });
 
 
-describe('/api/topics', function(){
+describe('3. GET /api/topics', function(){
 
     describe('200s', function(){
 
@@ -82,7 +82,7 @@ describe('/api/topics', function(){
 
 
 
-describe('/api/articles/:article_id', function(){
+describe('4. GET /api/articles/:article_id', function(){
 
     describe('200s', function(){
 
@@ -189,7 +189,7 @@ describe('/api/articles/:article_id', function(){
 });
 
 
-describe('/api/articles', function(){
+describe('5. GET /api/articles', function(){
 
     describe('200s', function(){
 
@@ -260,13 +260,14 @@ describe('/api/articles', function(){
             .then((response) => {
 
                 expect(response.body.articles).toBeSortedBy('created_at', {
-                    descending: true,
+                    descending: true
                     
                 });
 
             });
 
         });
+
 
     });
 
@@ -286,10 +287,82 @@ describe('/api/articles', function(){
         });
 
     });
+    
+});
+
+
+describe('11. /api/articles queries 200s', function(){
+
+    describe('200s', function(){
+
+        test('GET 200: when prompted, the articles are returned in ascending order', function(){
+
+            return superTest(app)
+            .get('/api/articles?order=ASC')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toBeSortedBy('created_at', 
+                {
+                    ascending: true
+                    
+                });
+
+            });
+
+        });
+
+        test('GET 200: sorts articles by a particular column', function(){
+
+            return superTest(app)
+            .get('/api/articles?sort_by=votes')
+            .expect(200)
+            .then((response) => {
+
+                expect(response.body.articles).toBeSortedBy('votes', 
+                {
+                    descending: true
+                    
+                });
+            });
+        });
+
+    });
+
+    describe('queries errors', function(){
+
+        test('400: responds with an error message "invalid query" when passed an invalid order', function(){
+
+            return superTest(app)
+            .get('/api/articles?order=ASS')
+            .expect(400)
+            .then(({ body }) =>{
+                expect(body.message).toBe('invalid query');
+
+            });
+
+        });
+
+        test('400: responds with an error message "invalid query" when passed an invalid column', function(){
+
+            return superTest(app)
+            .get('/api/articles?sort_by=boats')
+            .expect(400)
+            .then(({ body }) =>{
+                expect(body.message).toBe('invalid query');
+
+            });
+
+        });
+
+    });
 
 });
 
-describe('/api/articles/:article_id/comments', function(){
+
+
+
+describe('6. GET /api/articles/:article_id/comments', function(){
 
     describe('200s', function(){
 
@@ -585,7 +658,6 @@ describe('8. PATCH /api/articles/:article_id', function(){
     });
 
 
-
     describe('error handling', function(){
 
 
@@ -670,10 +742,6 @@ describe('9. DELETE /api/comments/:comment_id', function(){
     });
 
 
-
-
-
-
     describe('error handling', function(){
 
 
@@ -707,11 +775,7 @@ describe('9. DELETE /api/comments/:comment_id', function(){
 
 
     });
-
-
-});
-
-
+    
 describe('/api/users', function(){
 
     describe('200s', function(){

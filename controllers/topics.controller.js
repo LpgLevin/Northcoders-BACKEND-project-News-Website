@@ -25,8 +25,23 @@ exports.getArticleById = (request, response, next) => {
     });
 };
 
+
+
+// /api/articles?order=ascending
+
+// req.query would have a key of order and a value of asc { order: 'asc'}
+
+// const { order } = req.query;
+
 exports.getArticlesInOrder = (request, response, next) => {
-    selectArticlesInOrder()
+
+
+
+    const { order, sort_by } = request.query;
+
+    
+
+    selectArticlesInOrder(order, sort_by)
     .then((articles) => {
         response.status(200)
         .send({ articles })
@@ -40,6 +55,10 @@ exports.getArticlesInOrder = (request, response, next) => {
     });
 
 };
+
+
+
+
 
 
 exports.getCommentsById = (request, response, next) => {
