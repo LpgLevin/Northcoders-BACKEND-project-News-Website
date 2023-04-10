@@ -1,27 +1,177 @@
-{
-  "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
-  },
-  "GET /api/topics": {
-    "description": "serves an array of all topics",
-    "queries": [],
-    "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
-  },
-  "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
-    "exampleResponse": {
-      "articles": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+{ "endPoints": 
+    [{
+      "GET /api": {
+        "description": "serves up a json representation of all the available endpoints of the api"
+      },
+
+      "GET /api/topics": {
+
+        "description": "serves an array of all topics",
+        "queries": [],
+        "exampleResponse": {
+          "topics": [ { 
+            "description": "The man, the Mitch, the legend",
+            "slug": "mitch" } ]
         }
-      ]
-    }
-  }
+
+      },
+
+      "GET /api/articles/:article_id": {
+
+        "description": "serves an article by id",
+        "queries": [],
+        "exampleResponse": {
+          "articleObject": [
+            {
+              "article_id": 9,
+              "title": "Learn HTML5, CSS3, and Responsive WebSite Design in One Go",
+              "topic": "coding",
+              "author": "grumpy19",
+              "body": "Both CSS3 and HTML5 are just about fully supported in all modern browsers, and we there are techniques in place to patch old browsers that lack support. So there is no disadvantage to using CSS3 and HTML5 today. The opposite is true, however: there are many painful, frustrating disadvantages with forgoing HTML5 and CSS3. You may already “know” a bit of HTML5 and a touch of CSS3 (or perhaps you probably know enough old-school HTML and CSS, and with this knowledge, you might have thought you needn’t learn HTML5 and CSS3 fully.",
+              "created_at": "2020-05-26T14:06:00.000Z",
+              "votes": 0,
+              "article_img_url": "https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?w=700&h=700",
+              "comment_count": 8
+            }
+          ]
+        }
+      },
+
+      "GET /api/articles": {
+
+        "description": "serves all articles",
+        "queries": ["order", "column", "topic"],
+        "exampleResponse": {
+          "articles": [
+            {
+              "author": "grumpy19",
+              "title": "The Notorious MSG’s Unlikely Formula For Success",
+              "article_id": 34,
+              "topic": "cooking",
+              "created_at": "2020-11-22T11:13:00.000Z",
+              "votes": 0,
+              "article_img_url": "https://images.pexels.com/photos/2403392/pexels-photo-2403392.jpeg?w=700&h=700",
+              "comment_count": "11"
+            }
+          ]
+        }
+      },
+
+      "GET /api/articles/:article_id/comments": {
+
+        "description": "serves all the comments from the identified article",
+        "queries": [],
+        "exampleResponse": {
+          "commentArray": [
+            {
+              "comment_id": 221,
+              "votes": 0,
+              "created_at": "2020-09-18T10:08:00.000Z",
+              "author": "tickle122",
+              "body": "In quos et. Voluptatem ut at voluptatem earum consequuntur. Aliquid et accusantium. Facere non asperiores magnam quia exercitationem atque dignissimos voluptate enim.",
+              "article_id": 9
+            },
+            {
+              "comment_id": 45,
+              "votes": 10,
+              "created_at": "2020-09-09T17:11:00.000Z",
+              "author": "cooljmessy",
+              "body": "Sint doloribus expedita non sed fuga aliquid vero. Amet consectetur eos eum. Tempora error velit rerum vitae voluptatem voluptatibus consequuntur voluptatibus ea. Et vitae et pariatur est molestias. Nobis est harum debitis rem accusantium est ipsa sed. Voluptatem beatae at beatae.",
+              "article_id": 9
+            },
+            {
+              "comment_id": 214,
+              "votes": 9,
+              "created_at": "2020-08-05T19:23:00.000Z",
+              "author": "grumpy19",
+              "body": "Veniam ad et dignissimos sunt consequuntur adipisci et explicabo voluptatem. Cupiditate repellat quae laboriosam expedita.",
+              "article_id": 9
+            }
+          ]
+        }
+      },
+
+      "POST /api/articles/:article_id/comments": {
+
+        "description": "creates a comment and responds with a comment object",
+        "queries": [],
+        "exampleResponse": {
+          "comment": {
+            "comment_id": 302,
+            "body": "This is my comment",
+            "article_id": 1,
+            "author": "jessjelly",
+            "votes": 0,
+            "created_at": "2023-04-07T17:08:23.725Z"
+          }
+        }
+      },
+
+      "PATCH /api/articles/:article_id": {
+
+        "description": "updates vote count on identified article",
+        "queries": [],
+        "exampleResponse": {
+          "comment": {
+            "comment_id": 302,
+            "body": "This is my comment",
+            "article_id": 1,
+            "author": "jessjelly",
+            "votes": 1,
+            "created_at": "2023-04-07T17:08:23.725Z"
+          }
+        }
+      },
+
+      "DELETE /api/articles/:comment_id": {
+
+        "description": "deletes the identified comment, responds with an empty object",
+        "queries": [],
+        "exampleResponse": {}
+      },
+
+      "GET /api/users": {
+
+        "description": "serves an array of user objects",
+        "queries": [],
+        "exampleResponse": {
+          "users": [
+            {
+              "username": "tickle122",
+              "name": "Tom Tickle",
+              "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+            },
+            {
+              "username": "grumpy19",
+              "name": "Paul Grump",
+              "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+            },
+            {
+              "username": "happyamy2016",
+              "name": "Amy Happy",
+              "avatar_url": "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
+            },
+            {
+              "username": "cooljmessy",
+              "name": "Peter Messy",
+              "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002"
+            },
+            {
+              "username": "weegembump",
+              "name": "Gemma Bump",
+              "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553"
+            },
+            {
+              "username": "jessjelly",
+              "name": "Jess Jelly",
+              "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141"
+            }
+          ]
+        }
+      }
+
+
+
+
+    }]
 }
