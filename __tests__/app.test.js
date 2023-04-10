@@ -885,3 +885,24 @@ describe('10. GET /api/users', function(){
 
 });
 
+describe('13. GET /api', function(){
+
+    test('returns a json object describing all the available endpoints on the api', function(){
+
+        return superTest(app)
+        .get('/api')
+        .expect(200)
+        .then((response) => {
+
+            expect(Object.keys(response.body)).toEqual(["endPoints"]);
+            expect(response.body).toBeInstanceOf(Object);
+            expect(response.body.endPoints).toBeInstanceOf(Array);
+            expect(response.body.endPoints[0]).toBeInstanceOf(Object);
+
+
+        });
+
+
+    });
+
+});
