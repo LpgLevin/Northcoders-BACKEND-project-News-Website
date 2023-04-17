@@ -1,10 +1,11 @@
 const express = require('express');
 const { getTopics, getArticleById, getArticlesInOrder, getCommentsById, postComment, patchVotes, deleteComments, getUsers } = require('./controllers/topics.controller')
 const { invalidPathwayError, customError, psqlError400, serverError500 } = require('./controllers/errors.controller');
-
+const cors = require('cors');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 
