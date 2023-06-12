@@ -13,7 +13,9 @@ You can find the hosted version of this API by using the following URL
 ## Set-up and installation
 
 ## Minimum versions of Node.js and Postgres needed:
+
 Node: v19.6.0
+
 PostgreSQL: v13.0
 
 ## How to clone this project
@@ -41,28 +43,48 @@ Also in the root directory, run the following commands:
 
 
 ## How to run tests
-Ensure your terminal shows that you are in the file named __tests__ and use the command npm test <app.test.js OR utils.test.js> depending on which test file you are using.
+Ensure your terminal shows that you are in the file named __tests__ and use the command: 
+
+    npm test app.test.js 
+OR 
+
+    npm test utils.test.js
+    
+depending on which test file you are using.
 The test database is automatically created and seeded when running tests.
 
 
 ## This API includes the following endpoints:
 
 GET
-    - /api
-    - /api/users
-    - /api/topics
-    - /api/articles
-    - /api/articles/:article_id
-    - /api/articles/:article_id/comments
+    
+    /api
+
+    /api/users
+
+    /api/topics
+
+    /api/articles
+
+    /api/articles/:article_id
+
+    /api/articles/:article_id/comments
+
 
 PATCH
-    - /api/articles/:article_id":
+    
+    /api/articles/:article_id":
+
 
 POST
-    - /api/articles/:article_id/comments
+    
+    /api/articles/:article_id/comments
+
 
 DELETE
-    - /api/articles/:comment_id
+    
+    /api/articles/:comment_id
+
 
 To use these endpoints, append the appropriate endpoint to the following URL:
     
@@ -72,4 +94,4 @@ For example, get all articles, send a GET request to:
 
     https://lilybackendncnews.onrender.com/api/articles
 
-For more detailed  information on each endpoint, please refer to the endpoints.json file in this repository.git 
+For more detailed  information on each endpoint, please refer to the endpoints.json file in this repository. 
